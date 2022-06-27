@@ -1,9 +1,15 @@
 
-{} (:package |triadica)
+{} (:package |app)
   :configs $ {} (:init-fn |app.main/main!) (:reload-fn |app.main/reload!) (:version |0.0.1)
     :modules $ [] |touch-control/ |respo.calcit/ |triadica-space/
   :entries $ {}
   :files $ {}
+    |app.config $ {}
+      :defs $ {}
+        |inline-shader $ quote
+          defmacro inline-shader (file) (println "\"inline shader file:" file)
+            read-file $ str "\"shaders/" file
+      :ns $ quote (ns app.config)
     |app.main $ {}
       :defs $ {}
         |*store $ quote
@@ -68,20 +74,20 @@
           triadica.core :refer $ handle-key-event on-control-event load-objects! render-canvas! handle-screen-click! setup-mouse-events! reset-canvas-size!
           triadica.global :refer $ *gl-context *uniform-data
           triadica.hud :refer $ inject-hud!
-          triadica.app.shapes :refer $ bg-object cubes-object tree-object tiny-cube-object curve-ball spin-city fiber-bending axis-object plate-bending mushroom-object line-wave
+          app.shapes :refer $ line-wave
           triadica.alias :refer $ group
-    |triadica.app.shapes $ {}
+    |app.shapes $ {}
       :defs $ {}
         |line-wave $ quote
           defn line-wave () (; js/console.log "\"data" data)
             object $ {} (:draw-mode :line-strip)
-              :vertex-shader $ inline-shader "\"line-wave.vert"
-              :fragment-shader $ inline-shader "\"line-wave.frag"
+              :vertex-shader $ inline-shader "\"wave.vert"
+              :fragment-shader $ inline-shader "\"wave.frag"
               :attributes $ {}
                 :idx $ range 100000
       :ns $ quote
-        ns triadica.app.shapes $ :require ("\"twgl.js" :as twgl)
-          triadica.config :refer $ inline-shader
+        ns app.shapes $ :require ("\"twgl.js" :as twgl)
+          app.config :refer $ inline-shader
           triadica.alias :refer $ object
           triadica.math :refer $ &v+
           triadica.core :refer $ %nested-attribute

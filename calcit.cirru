@@ -3,8 +3,35 @@
   :configs $ {} (:init-fn |app.main/main!) (:port 6001) (:reload-fn |app.main/reload!) (:version |0.0.1)
     :modules $ [] |touch-control/ |respo.calcit/ |triadica-space/
   :entries $ {}
-  :ir $ {} (:package |triadica)
+  :ir $ {} (:package |app)
     :files $ {}
+      |app.config $ {}
+        :configs $ {}
+        :defs $ {}
+          |inline-shader $ {} (:at 1656097159354) (:by |u0) (:type :expr)
+            :data $ {}
+              |T $ {} (:at 1656097161871) (:by |u0) (:text |defmacro) (:type :leaf)
+              |b $ {} (:at 1656097195460) (:by |u0) (:text |inline-shader) (:type :leaf)
+              |h $ {} (:at 1656097159354) (:by |u0) (:type :expr)
+                :data $ {}
+                  |T $ {} (:at 1656097164091) (:by |u0) (:text |file) (:type :leaf)
+              |j $ {} (:at 1656097668441) (:by |u0) (:type :expr)
+                :data $ {}
+                  |T $ {} (:at 1656097669330) (:by |u0) (:text |println) (:type :leaf)
+                  |b $ {} (:at 1656097676069) (:by |u0) (:text "|\"inline shader file:") (:type :leaf)
+                  |h $ {} (:at 1656097674983) (:by |u0) (:text |file) (:type :leaf)
+              |l $ {} (:at 1656097166602) (:by |u0) (:type :expr)
+                :data $ {}
+                  |T $ {} (:at 1656097167918) (:by |u0) (:text |read-file) (:type :leaf)
+                  |b $ {} (:at 1656097170637) (:by |u0) (:type :expr)
+                    :data $ {}
+                      |T $ {} (:at 1656097171137) (:by |u0) (:text |str) (:type :leaf)
+                      |b $ {} (:at 1656097179496) (:by |u0) (:text "|\"shaders/") (:type :leaf)
+                      |h $ {} (:at 1656097181086) (:by |u0) (:text |file) (:type :leaf)
+        :ns $ {} (:at 1656097155437) (:by |u0) (:type :expr)
+          :data $ {}
+            |T $ {} (:at 1656097155437) (:by |u0) (:text |ns) (:type :leaf)
+            |b $ {} (:at 1656097155437) (:by |u0) (:text |app.config) (:type :leaf)
       |app.main $ {}
         :configs $ {}
         :defs $ {}
@@ -425,21 +452,11 @@
                         |T $ {} (:at 1653326257509) (:by |u0) (:text |inject-hud!) (:type :leaf)
                 |z $ {} (:at 1653324442646) (:by |u0) (:type :expr)
                   :data $ {}
-                    |T $ {} (:at 1653325422880) (:by |u0) (:text |triadica.app.shapes) (:type :leaf)
+                    |T $ {} (:at 1656097645679) (:by |u0) (:text |app.shapes) (:type :leaf)
                     |b $ {} (:at 1653324453338) (:by |u0) (:text |:refer) (:type :leaf)
-                    |h $ {} (:at 1653324453931) (:by |u0) (:type :expr)
+                    |h $ {} (:at 1656097652161) (:by |u0) (:type :expr)
                       :data $ {}
-                        |T $ {} (:at 1653324454185) (:by |u0) (:text |bg-object) (:type :leaf)
-                        |b $ {} (:at 1653325209570) (:by |u0) (:text |cubes-object) (:type :leaf)
-                        |h $ {} (:at 1653567642902) (:by |u0) (:text |tree-object) (:type :leaf)
-                        |l $ {} (:at 1654075447244) (:by |u0) (:text |tiny-cube-object) (:type :leaf)
-                        |o $ {} (:at 1654134928343) (:by |u0) (:text |curve-ball) (:type :leaf)
-                        |q $ {} (:at 1654258273649) (:by |u0) (:text |spin-city) (:type :leaf)
-                        |s $ {} (:at 1654888933355) (:by |u0) (:text |fiber-bending) (:type :leaf)
-                        |t $ {} (:at 1654890674843) (:by |u0) (:text |axis-object) (:type :leaf)
-                        |u $ {} (:at 1654999760036) (:by |u0) (:text |plate-bending) (:type :leaf)
-                        |v $ {} (:at 1655022422342) (:by |u0) (:text |mushroom-object) (:type :leaf)
-                        |w $ {} (:at 1655992645128) (:by |u0) (:text |line-wave) (:type :leaf)
+                        |T $ {} (:at 1656097652408) (:by |u0) (:text |line-wave) (:type :leaf)
                 |zD $ {} (:at 1653326245485) (:by |u0) (:type :expr)
                   :data $ {}
                     |T $ {} (:at 1653326250295) (:by |u0) (:text |triadica.alias) (:type :leaf)
@@ -447,7 +464,7 @@
                     |h $ {} (:at 1653326251294) (:by |u0) (:type :expr)
                       :data $ {}
                         |T $ {} (:at 1653326252006) (:by |u0) (:text |group) (:type :leaf)
-      |triadica.app.shapes $ {}
+      |app.shapes $ {}
         :configs $ {}
         :defs $ {}
           |line-wave $ {} (:at 1656038965975) (:by |u0) (:type :expr)
@@ -478,14 +495,14 @@
                           |b $ {} (:at 1656038965975) (:by |u0) (:type :expr)
                             :data $ {}
                               |T $ {} (:at 1656038965975) (:by |u0) (:text |inline-shader) (:type :leaf)
-                              |b $ {} (:at 1656038965975) (:by |u0) (:text "|\"line-wave.vert") (:type :leaf)
+                              |b $ {} (:at 1656097277100) (:by |u0) (:text "|\"wave.vert") (:type :leaf)
                       |l $ {} (:at 1656038965975) (:by |u0) (:type :expr)
                         :data $ {}
                           |T $ {} (:at 1656038965975) (:by |u0) (:text |:fragment-shader) (:type :leaf)
                           |b $ {} (:at 1656038965975) (:by |u0) (:type :expr)
                             :data $ {}
                               |T $ {} (:at 1656038965975) (:by |u0) (:text |inline-shader) (:type :leaf)
-                              |b $ {} (:at 1656038965975) (:by |u0) (:text "|\"line-wave.frag") (:type :leaf)
+                              |b $ {} (:at 1656097278728) (:by |u0) (:text "|\"wave.frag") (:type :leaf)
                       |o $ {} (:at 1656038965975) (:by |u0) (:type :expr)
                         :data $ {}
                           |T $ {} (:at 1656038965975) (:by |u0) (:text |:attributes) (:type :leaf)
@@ -502,7 +519,7 @@
         :ns $ {} (:at 1653325354625) (:by |u0) (:type :expr)
           :data $ {}
             |T $ {} (:at 1653325354625) (:by |u0) (:text |ns) (:type :leaf)
-            |b $ {} (:at 1653325354625) (:by |u0) (:text |triadica.app.shapes) (:type :leaf)
+            |b $ {} (:at 1653325354625) (:by |u0) (:text |app.shapes) (:type :leaf)
             |h $ {} (:at 1653325431848) (:by |u0) (:type :expr)
               :data $ {}
                 |T $ {} (:at 1653325432598) (:by |u0) (:text |:require) (:type :leaf)
@@ -513,7 +530,7 @@
                     |h $ {} (:at 1653325440301) (:by |u0) (:text |twgl) (:type :leaf)
                 |h $ {} (:at 1653325525377) (:by |u0) (:type :expr)
                   :data $ {}
-                    |T $ {} (:at 1653325533507) (:by |u0) (:text |triadica.config) (:type :leaf)
+                    |T $ {} (:at 1656097186307) (:by |u0) (:text |app.config) (:type :leaf)
                     |b $ {} (:at 1653325534310) (:by |u0) (:text |:refer) (:type :leaf)
                     |h $ {} (:at 1653325535403) (:by |u0) (:type :expr)
                       :data $ {}
