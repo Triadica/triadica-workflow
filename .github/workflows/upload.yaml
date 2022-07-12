@@ -3,7 +3,6 @@ name: Upload
 on:
   push:
     branches:
-      - master
       - main
   pull_request: {}
 
@@ -30,7 +29,7 @@ jobs:
         && git clone https://github.com/Quamolit/touch-control.git
         && git clone https://github.com/mvc-works/pointed-prompt.git
         && git clone https://github.com/Respo/respo.calcit.git
-        && git clone https://github.com/Triadica/triadica-space.git --branch 0.0.2
+        && git clone https://github.com/Triadica/triadica-space.git --branch 0.0.7
 
     - name: "compiles to js"
       run: >

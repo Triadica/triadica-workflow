@@ -17,18 +17,14 @@
         |canvas $ quote
           def canvas $ js/document.querySelector "\"canvas"
         |dispatch! $ quote
-          defn dispatch! (op data) (js/console.log "\"Dispatch:" op data)
-            if (= op :city-spin)
-              do
-                swap! *uniform-data update :spin-city $ fn (x)
-                  + x $ * 0.01 data
-                render-canvas!
-              let
-                  store @*store
-                  next $ case-default op
-                    do (js/console.warn "\"unknown op" op) nil
-                    :cube-right $ update store :v inc
-                if (some? next) (reset! *store next)
+          defn dispatch! (op data)
+            when dev? $ js/console.log "\"Dispatch:" op data
+            let
+                store @*store
+                next $ case-default op
+                  do (js/console.warn "\"unknown op" op) nil
+                  :cube-right $ update store :v inc
+              if (some? next) (reset! *store next)
         |main! $ quote
           defn main! ()
             if dev? $ load-console-formatter!
@@ -65,14 +61,14 @@
                 ; mushroom-object
                 line-wave
               , dispatch!
-            render-canvas!
+            paint-canvas!
       :ns $ quote
         ns app.main $ :require ("\"./calcit.build-errors" :default build-errors) ("\"bottom-tip" :default hud!)
           triadica.config :refer $ dev? dpr
           "\"twgl.js" :as twgl
           touch-control.core :refer $ render-control! start-control-loop! replace-control-loop!
-          triadica.core :refer $ handle-key-event on-control-event load-objects! render-canvas! handle-screen-click! setup-mouse-events! reset-canvas-size!
-          triadica.global :refer $ *gl-context *uniform-data
+          triadica.core :refer $ handle-key-event on-control-event load-objects! paint-canvas! handle-screen-click! setup-mouse-events! reset-canvas-size!
+          triadica.global :refer $ *gl-context
           triadica.hud :refer $ inject-hud!
           app.shapes :refer $ line-wave
           triadica.alias :refer $ group
