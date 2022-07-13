@@ -14,12 +14,6 @@
               |b $ {} (:at 1657694517954) (:by |u0) (:text |comp-container) (:type :leaf)
               |h $ {} (:at 1656038965975) (:by |u0) (:type :expr)
                 :data $ {}
-              |l $ {} (:at 1656038965975) (:by |u0) (:type :expr)
-                :data $ {}
-                  |T $ {} (:at 1656038965975) (:by |u0) (:text |;) (:type :leaf)
-                  |b $ {} (:at 1656038965975) (:by |u0) (:text |js/console.log) (:type :leaf)
-                  |h $ {} (:at 1656038965975) (:by |u0) (:text "|\"data") (:type :leaf)
-                  |l $ {} (:at 1656038965975) (:by |u0) (:text |data) (:type :leaf)
               |o $ {} (:at 1656038965975) (:by |u0) (:type :expr)
                 :data $ {}
                   |T $ {} (:at 1656038965975) (:by |u0) (:text |object) (:type :leaf)

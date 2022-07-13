@@ -7,8 +7,8 @@
     |app.comp.container $ {}
       :defs $ {}
         |comp-container $ quote
-          defn comp-container () (; js/console.log "\"data" data)
-            object $ {} (:draw-mode :line-strip)
+          defn comp-container () $ object
+            {} (:draw-mode :line-strip)
               :vertex-shader $ inline-shader "\"wave.vert"
               :fragment-shader $ inline-shader "\"wave.frag"
               :attributes $ {}
