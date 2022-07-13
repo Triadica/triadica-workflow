@@ -4,6 +4,21 @@
     :modules $ [] |touch-control/ |respo.calcit/ |triadica-space/
   :entries $ {}
   :files $ {}
+    |app.comp.container $ {}
+      :defs $ {}
+        |comp-container $ quote
+          defn comp-container () (; js/console.log "\"data" data)
+            object $ {} (:draw-mode :line-strip)
+              :vertex-shader $ inline-shader "\"wave.vert"
+              :fragment-shader $ inline-shader "\"wave.frag"
+              :attributes $ {}
+                :idx $ range 100000
+      :ns $ quote
+        ns app.comp.container $ :require ("\"twgl.js" :as twgl)
+          app.config :refer $ inline-shader
+          triadica.alias :refer $ object
+          triadica.math :refer $ &v+
+          triadica.core :refer $ %nested-attribute
     |app.config $ {}
       :defs $ {}
         |inline-shader $ quote
@@ -29,7 +44,7 @@
           defn main! ()
             if dev? $ load-console-formatter!
             twgl/setDefaults $ js-object (:attribPrefix "\"a_")
-            inject-hud!
+            ; inject-hud!
             reset-canvas-size! canvas
             reset! *gl-context $ .!getContext canvas "\"webgl"
               js-object $ :antialias true
@@ -51,39 +66,13 @@
             hud! "\"error" build-errors
         |render-app! $ quote
           defn render-app! ()
-            load-objects!
-              group ({}) (; axis-object) (; cubes-object) (; bg-object) (; tree-object)
-                ; tiny-cube-object $ :v @*store
-                ; curve-ball
-                ; spin-city
-                ; fiber-bending
-                ; plate-bending
-                ; mushroom-object
-                line-wave
-              , dispatch!
+            load-objects! (comp-container) dispatch!
             paint-canvas!
       :ns $ quote
         ns app.main $ :require ("\"./calcit.build-errors" :default build-errors) ("\"bottom-tip" :default hud!)
           triadica.config :refer $ dev? dpr
           "\"twgl.js" :as twgl
           touch-control.core :refer $ render-control! start-control-loop! replace-control-loop!
-          triadica.core :refer $ handle-key-event on-control-event load-objects! paint-canvas! handle-screen-click! setup-mouse-events! reset-canvas-size!
+          triadica.core :refer $ on-control-event load-objects! paint-canvas! setup-mouse-events! reset-canvas-size!
           triadica.global :refer $ *gl-context
-          triadica.hud :refer $ inject-hud!
-          app.shapes :refer $ line-wave
-          triadica.alias :refer $ group
-    |app.shapes $ {}
-      :defs $ {}
-        |line-wave $ quote
-          defn line-wave () (; js/console.log "\"data" data)
-            object $ {} (:draw-mode :line-strip)
-              :vertex-shader $ inline-shader "\"wave.vert"
-              :fragment-shader $ inline-shader "\"wave.frag"
-              :attributes $ {}
-                :idx $ range 100000
-      :ns $ quote
-        ns app.shapes $ :require ("\"twgl.js" :as twgl)
-          app.config :refer $ inline-shader
-          triadica.alias :refer $ object
-          triadica.math :refer $ &v+
-          triadica.core :refer $ %nested-attribute
+          app.comp.container :refer $ comp-container
