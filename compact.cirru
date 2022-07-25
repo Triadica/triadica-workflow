@@ -7,18 +7,20 @@
     |app.comp.container $ {}
       :defs $ {}
         |comp-container $ quote
-          defn comp-container () $ object
-            {} (:draw-mode :line-strip)
-              :vertex-shader $ inline-shader "\"wave.vert"
-              :fragment-shader $ inline-shader "\"wave.frag"
-              :attributes $ {}
-                :idx $ range 100000
+          defn comp-container (store)
+            let
+                states $ :states store
+              object $ {} (:draw-mode :line-strip)
+                :vertex-shader $ inline-shader "\"wave.vert"
+                :fragment-shader $ inline-shader "\"wave.frag"
+                :attributes $ {}
+                  :idx $ range 100000
       :ns $ quote
         ns app.comp.container $ :require ("\"twgl.js" :as twgl)
           app.config :refer $ inline-shader
           triadica.alias :refer $ object
           triadica.math :refer $ &v+
-          triadica.core :refer $ %nested-attribute
+          triadica.core :refer $ %nested-attribute >>
     |app.config $ {}
       :defs $ {}
         |inline-shader $ quote
@@ -28,7 +30,8 @@
     |app.main $ {}
       :defs $ {}
         |*store $ quote
-          defatom *store $ {} (:v 0)
+          defatom *store $ {}
+            :states $ {}
         |canvas $ quote
           def canvas $ js/document.querySelector "\"canvas"
         |dispatch! $ quote
@@ -38,6 +41,7 @@
                 store @*store
                 next $ case-default op
                   do (js/console.warn "\"unknown op" op) nil
+                  :states $ update-states store ([] op data)
                   :cube-right $ update store :v inc
               if (some? next) (reset! *store next)
         |main! $ quote
@@ -66,13 +70,13 @@
             hud! "\"error" build-errors
         |render-app! $ quote
           defn render-app! ()
-            load-objects! (comp-container) dispatch!
+            load-objects! (comp-container @*store) dispatch!
             paint-canvas!
       :ns $ quote
         ns app.main $ :require ("\"./calcit.build-errors" :default build-errors) ("\"bottom-tip" :default hud!)
           triadica.config :refer $ dev? dpr
           "\"twgl.js" :as twgl
           touch-control.core :refer $ render-control! start-control-loop! replace-control-loop!
-          triadica.core :refer $ on-control-event load-objects! paint-canvas! setup-mouse-events! reset-canvas-size!
+          triadica.core :refer $ on-control-event load-objects! paint-canvas! setup-mouse-events! reset-canvas-size! update-states
           triadica.global :refer $ *gl-context
           app.comp.container :refer $ comp-container
