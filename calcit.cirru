@@ -1,7 +1,7 @@
 
 {}
   :configs $ {} (:init-fn |app.main/main!) (:port 6001) (:reload-fn |app.main/reload!) (:version |0.0.1)
-    :modules $ [] |touch-control/ |respo.calcit/ |triadica-space/
+    :modules $ [] |touch-control/ |respo.calcit/ |triadica-space/ |quaternion/
   :entries $ {}
   :ir $ {} (:package |app)
     :files $ {}

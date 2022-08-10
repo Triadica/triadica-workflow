@@ -1,7 +1,7 @@
 
 {} (:package |app)
   :configs $ {} (:init-fn |app.main/main!) (:reload-fn |app.main/reload!) (:version |0.0.1)
-    :modules $ [] |touch-control/ |respo.calcit/ |triadica-space/
+    :modules $ [] |touch-control/ |respo.calcit/ |triadica-space/ |quaternion/
   :entries $ {}
   :files $ {}
     |app.comp.container $ {}
