@@ -7,10 +7,10 @@
   "license": "MIT",
   "devDependencies": {
     "bottom-tip": "^0.1.3",
-    "vite": "^3.1.0"
+    "vite": "^3.1.3"
   },
   "dependencies": {
-    "@calcit/procs": "^0.6.4",
+    "@calcit/procs": "^0.6.5",
     "@quamolit/touch-control": "^0.0.11",
     "mobile-detect": "^1.4.5",
     "twgl.js": "^5.0.1"
