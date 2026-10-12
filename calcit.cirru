@@ -50,13 +50,17 @@
             .unwrap $ query-selector |canvas
           :examples $ []
           :schema $ :: 'js-ffi.browser/DomElementHost
-        'dispatch! $ %{} 'CodeEntry (:doc |)
+        'dispatch! $ %{} 'CodeEntry
+          :doc "|Dispatch adapter for the renderer: state widgets send a List<Tag> cursor as op and arbitrary state as data. Validate cursor keys before invoking update-states. The old tagged :states placeholder was invalid and is not a cursor alias. :cube-right requires an existing numeric :v; unknown operations warn without resetting the store."
           :code $ quote $ defn dispatch! (op data)
             when dev? $ js/console.log |Dispatch: op data
             let
                 store @*store
-              if (= op :states)
-                reset! *store $ update-states store $ [] op data
+              if (list? op)
+                let
+                    cursor $ map op $ fn (key)
+                      if (tag? key) key $ raise "|State cursor requires Tag keys"
+                  reset! *store $ update-states store $ [] cursor data
                 if (= op :cube-right)
                   let
                       value $ &map:get store :v
