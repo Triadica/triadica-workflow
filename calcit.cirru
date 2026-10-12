@@ -41,9 +41,10 @@
     'app.main $ %{} 'FileEntry
       :defs $ {}
         '*store $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defatom *store
+          :code $ quote $ defref *store
             {} $ :states $ {}
           :examples $ []
+          :schema $ :: 'Ref $ :: 'Map 'Tag 'Dynamic
         'canvas $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def canvas
             .unwrap $ query-selector |canvas
@@ -54,43 +55,65 @@
             when dev? $ js/console.log |Dispatch: op data
             let
                 store @*store
-                next $ case-default op
-                  do (js/console.warn "|unknown op" op) nil
-                  :states $ update-states store $ [] op data
-                  :cube-right $ update store :v inc
-              if (some? next) (reset! *store next)
+              if (= op :states)
+                reset! *store $ update-states store $ [] op data
+                if (= op :cube-right)
+                  let
+                      value $ &map:get store :v
+                    if (number? value)
+                      reset! *store $ assoc store :v $ inc value
+                      raise "|cube-right expects numeric :v"
+                  js/console.warn "|unknown op" op
+            , &unit
           :examples $ []
+          :schema $ :: 'Fn $ {} (:return 'Unit)
+            :args $ [] 'Dynamic 'Dynamic
+            :features $ #{} :js-ffi
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! ()
             if dev? $ load-console-formatter!
-            twgl/setDefaults $ js-object $ :attribPrefix |a_
-            ; inject-hud!
+            twgl/setDefaults $ &js-object :attribPrefix |a_
             reset-canvas-size! canvas
-            reset! *gl-context $ .!getContext canvas |webgl $ js-object (:antialias true)
+            let
+                context $ .?!getContext canvas |webgl $ &js-object :antialias true
+              if (js-present? context)
+                reset! *gl-context $ Option :some context
+                raise |WebGL-context-unavailable
             render-app!
             render-control!
             start-control-loop! 10 on-control-event
-            add-watch *store :change $ fn (v _p) (render-app!)
+            add-watch! *store :change $ fn (v _p) (render-app!)
             set! js/window.onresize $ fn (event) (reset-canvas-size! canvas) (render-app!)
             setup-mouse-events! canvas
+            , &unit
           :examples $ []
+          :schema $ :: 'Fn $ {} (:return 'Unit)
+            :args $ []
+            :features $ #{} :js-ffi
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! ()
             if (nil? build-errors)
-              do (remove-watch *store :change)
-                add-watch *store :change $ fn (v _p) (render-app!)
+              do (remove-watch! *store :change)
+                add-watch! *store :change $ fn (v _p) (render-app!)
                 replace-control-loop! 10 on-control-event
                 set! js/window.onresize $ fn (event) (reset-canvas-size! canvas) (render-app!)
                 setup-mouse-events! canvas
                 render-app!
                 hud! |ok~ |OK
               hud! |error build-errors
+            , &unit
           :examples $ []
+          :schema $ :: 'Fn $ {} (:return 'Unit)
+            :args $ []
+            :features $ #{} :js-ffi
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
             load-objects! (comp-container @*store) dispatch!
             paint-canvas!
+            , &unit
           :examples $ []
+          :schema $ :: 'Fn $ {} (:return 'Unit)
+            :args $ []
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.main
           :require (|./calcit.build-errors :default build-errors) (|bottom-tip :default hud!)
