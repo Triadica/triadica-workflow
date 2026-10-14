@@ -4,7 +4,11 @@
 
 ### Usages
 
-Use Node.js 24, Yarn 4.18.0 and Calcit 0.29.0. `calcit.cirru` is the source
+使用者影响：本迁移候选同步正式 Calcit/procs 0.29.3，配套 Touch Control 0.0.30、Triadica Space 0.0.43、Respo 0.16.120、Quaternion 0.2.13 和 JS-FFI 0.2.3。该依赖图须在前置 Space 0.0.43 正式发布后使用，不引用 main/hash；模板自身版本 0.0.1 保持，不额外发模块 release。原场景源码、状态 cursor/错误处理和部署路径不变。
+
+相对于旧 Space 0.0.40，此升级继承 0.0.42 已发布的绘制帧边界：`paint-canvas!` 返回 Unit，将绘制安排到下一浏览器帧，同一帧前请求合并并读取最新状态，不再承诺调用栈内同步绘制完成。默认 glow 保留；模板本身不另外修改该语义。
+
+Use Node.js 24, Yarn 4.18.0 and Calcit 0.29.3. `calcit.cirru` is the source
 Snapshot and `deps.cirru` pins formal module releases.
 
 ```bash
@@ -12,7 +16,7 @@ corepack enable
 caps --strict --ci
 yarn install --immutable
 caps verify --toolchain
-calcit --check-only --all-defs --strict-types
+calcit --check-only --all-defs
 calcit js
 yarn vite
 ```

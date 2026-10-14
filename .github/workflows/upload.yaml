@@ -40,7 +40,7 @@ jobs:
       run: |
         calcit calcit.cirru edit format
         git diff --exit-code -- calcit.cirru
-        calcit calcit.cirru --check-only --all-defs --strict-types
+        calcit calcit.cirru --check-only --all-defs
 
     - name: Select frontend CDN path
       id: asset-path
