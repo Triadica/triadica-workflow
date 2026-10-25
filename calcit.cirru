@@ -62,11 +62,12 @@
                       if (tag? key) key $ raise "|State cursor requires Tag keys"
                   reset! *store $ update-states store $ [] cursor data
                 if (= op :cube-right)
-                  let
-                      value $ &map:get store :v
-                    if (number? value)
-                      reset! *store $ assoc store :v $ inc value
-                      raise "|cube-right expects numeric :v"
+                  match (get store :v)
+                    (:some value)
+                      if (number? value)
+                        reset! *store $ assoc store :v $ inc value
+                        raise "|cube-right expects numeric :v"
+                    (:none) (raise "|cube-right expects numeric :v")
                   js/console.warn "|unknown op" op
             , &unit
           :examples $ []
