@@ -15,13 +15,14 @@ concurrency:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7.0.1
       with:
         persist-credentials: false
 
-    - uses: actions/setup-node@v6
+    - uses: actions/setup-node@v6.5.0
       with:
         node-version: 24
         package-manager-cache: false
@@ -31,16 +32,24 @@ jobs:
         corepack enable
         corepack prepare yarn@4.18.0 --activate
 
-    - uses: calcit-lang/setup-calcit@ca701be5a471759e442aa053cd100720bbe1f09f # v1.5
+    - uses: calcit-lang/setup-calcit@v1.5.0
+      with:
+        deps-file: deps.cirru
+        tools: calcit,caps
+        caps-version: "0.1.1"
 
     - name: Install formal dependencies
       run: caps --strict --ci && yarn install --immutable && caps verify --toolchain
 
     - name: Check canonical snapshot and types
       run: |
+        set -euo pipefail
+        test ! -e compact.cirru
+        test ! -e package.cirru
         calcit calcit.cirru edit format
         git diff --exit-code -- calcit.cirru
         calcit calcit.cirru --check-only --all-defs
+        calcit calcit.cirru fix --workflow strict --verify
 
     - name: Select frontend CDN path
       id: asset-path
@@ -76,7 +85,7 @@ jobs:
     - name: Upload and verify frontend assets
       if: steps.production.outputs.current == 'true'
       timeout-minutes: 10
-      uses: worktools/cos-upload-action@06d6027dcca6413c5936e04a9b6e9f0d5ef71ba0 # v1.2.0
+      uses: worktools/cos-upload-action@v1.2.0
       with:
         source-dir: dist/assets
         bucket: ${{ secrets.COS_BUCKET }}
