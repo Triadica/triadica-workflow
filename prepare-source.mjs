@@ -24,7 +24,8 @@ if(process.argv[2]==='apply'){
 assert.deepEqual(views(),expected);assert.equal(blob(),readFileSync('acceptance/modified-blob.txt','utf8'));
 for(const[f,s]of Object.entries(p.manifests))assert.equal(readFileSync(f,'utf8'),s);
 const oldLock=run('git',['show',p.base+':yarn.lock']);
-const runtimeOnly=s=>s.replace(/"@calcit\/procs@npm:[^"]+":\n(?:  .*\n|\n)*?(?=\S|$)/g,'__PROC_BLOCK__\n').replace(/@calcit\/procs: "npm:[^"]+"/g,'@calcit/procs: "npm:RUNTIME"');
+const runtimeOnly=s=>s.replace(/"@calcit\/procs@npm:[^"]+":\n(?:  .*\n|\n)*?(?=\S|$)/g,'__PROC_BLOCK__\n').replace(/"@calcit\/procs": "npm:[^"]+"/g,'"@calcit/procs": "npm:RUNTIME"');
+writeFileSync('acceptance/lock-diff.txt',run('git',['diff','--','yarn.lock']));
 assert.deepEqual(runtimeOnly(readFileSync('yarn.lock','utf8')),runtimeOnly(oldLock));
 run('git',['diff','--exit-code',p.base,'--','shaders']);
 writeFileSync('acceptance/source-evidence.json',JSON.stringify({beforeBlob:p.blob,afterBlob:blob(),definitions:10,attachedTests:0,fullSourceViewsMatch:true,sourceDefinition:'app.main/dispatch!',runtimeOnlyLock:true,shadersUnchanged:true}));
