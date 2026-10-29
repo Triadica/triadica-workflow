@@ -17,10 +17,9 @@
               :fragment-shader $ inline-shader |wave.frag
               :attributes $ {} $ :idx (range 100000)
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :args $ [] 'V
-            :generics $ [] 'V
-            :return $ :: 'Map 'Tag 'Dynamic
+          :schema $ quote $ Fn V
+            -> $ Map Tag Dynamic
+            :generics V
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.comp.container
           :require
@@ -32,10 +31,9 @@
           :code $ quote $ defmacro inline-shader (file) (println "|inline shader file:" file)
             read-file $ str |shaders/ file
           :examples $ []
-          :schema $ :: 'Macro $ {}
-            :capabilities $ #{} :fs-read :log
-            :expansion $ :: 'Expr 'String
-            :required $ [] 'Syntax
+          :schema $ quote $ Macro Syntax
+            -> $ Expr String
+            :capabilities :fs-read :log
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.config
     'app.main $ %{} 'FileEntry
@@ -44,12 +42,12 @@
           :code $ quote $ defref *store
             {} $ :states $ {}
           :examples $ []
-          :schema $ :: 'Ref $ :: 'Map 'Tag 'Dynamic
+          :schema $ quote $ Ref (Map Tag Dynamic)
         'canvas $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def canvas
             .unwrap $ query-selector |canvas
           :examples $ []
-          :schema $ :: 'js-ffi.browser/DomElementHost
+          :schema $ quote js-ffi.browser/DomElementHost
         'dispatch! $ %{} 'CodeEntry
           :doc "|Dispatch adapter for the renderer: state widgets send a List<Tag> cursor as op and arbitrary state as data. Validate cursor keys before invoking update-states. The old tagged :states placeholder was invalid and is not a cursor alias. :cube-right requires an existing numeric :v; unknown operations warn without resetting the store."
           :code $ quote $ defn dispatch! (op data)
@@ -71,9 +69,7 @@
                   js/console.warn "|unknown op" op
             , &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ [] 'Dynamic 'Dynamic
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn Dynamic Dynamic (-> Unit) (:features :js-ffi)
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! ()
             if dev? $ load-console-formatter!
@@ -92,9 +88,7 @@
             setup-mouse-events! canvas
             , &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! ()
             if (nil? build-errors)
@@ -108,17 +102,14 @@
               hud! |error build-errors
             , &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
             load-objects! (comp-container @*store) dispatch!
             paint-canvas!
             , &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ []
+          :schema $ quote $ Fn (-> Unit)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.main
           :require (|./calcit.build-errors :default build-errors) (|bottom-tip :default hud!)
