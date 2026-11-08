@@ -11,15 +11,14 @@
     'app.comp.container $ %{} 'FileEntry
       :defs $ {} $ 'comp-container
         %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn comp-container (store)
+          :code $ quote $ defn comp-container ()
             object $ {} (:draw-mode :line-strip)
               :vertex-shader $ inline-shader |wave.vert
               :fragment-shader $ inline-shader |wave.frag
               :attributes $ {} $ :idx (range 100000)
           :examples $ []
-          :schema $ quote $ Fn V
+          :schema $ quote $ Fn
             -> $ Map Tag Dynamic
-            :generics V
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.comp.container
           :require
@@ -43,33 +42,41 @@
             {} $ :states $ {}
           :examples $ []
           :schema $ quote $ Ref (Map Tag Dynamic)
+        'SceneOp $ %{} 'CodeEntry
+          :doc "|A direct state cursor or a tagged scene operation."
+          :code $ quote $ defunion SceneOp (List Tag) Tag
+          :examples $ []
+          :schema $ quote UnionDef
         'canvas $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def canvas
             .unwrap $ query-selector |canvas
           :examples $ []
           :schema $ quote js-ffi.browser/DomElementHost
         'dispatch! $ %{} 'CodeEntry
-          :doc "|Dispatch adapter for the renderer: state widgets send a List<Tag> cursor as op and arbitrary state as data. Validate cursor keys before invoking update-states. The old tagged :states placeholder was invalid and is not a cursor alias. :cube-right requires an existing numeric :v; unknown operations warn without resetting the store."
+          :doc "|Decode the renderer operation while preserving arbitrary cursor state values."
           :code $ quote $ defn dispatch! (op data)
             when dev? $ js/console.log |Dispatch: op data
             let
                 store @*store
-              if (list? op)
-                let
-                    cursor $ map op $ fn (key)
-                      if (tag? key) key $ raise "|State cursor requires Tag keys"
-                  reset! *store $ update-states store $ [] cursor data
-                if (= op :cube-right)
-                  match (get store :v)
-                    (:some value)
-                      if (number? value)
-                        reset! *store $ assoc store :v $ inc value
-                        raise "|cube-right expects numeric :v"
-                    (:none) (raise "|cube-right expects numeric :v")
-                  js/console.warn "|unknown op" op
+              match (try-decode-map-as op SceneOp)
+                (:ok operation)
+                  match operation
+                    (List cursor)
+                      reset! *store $ update-states store $ [] cursor data
+                    (Tag tag)
+                      if (= tag :cube-right)
+                        match (get store :v)
+                          (:some value)
+                            if (number? value)
+                              reset! *store $ assoc store :v $ inc value
+                              raise "|cube-right expects numeric :v"
+                          (:none) (raise "|cube-right expects numeric :v")
+                        js/console.warn "|unknown op" op
+                (:err _)
+                  if (list? op) (raise "|State cursor requires Tag keys") (js/console.warn "|unknown op" op)
             , &unit
           :examples $ []
-          :schema $ quote $ Fn Dynamic Dynamic (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn Operation Payload (-> Unit) (:generics Operation Payload) (:features :js-ffi)
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! ()
             if dev? $ load-console-formatter!
@@ -105,7 +112,7 @@
           :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
-            load-objects! (comp-container @*store) dispatch!
+            load-objects! (comp-container) dispatch!
             paint-canvas!
             , &unit
           :examples $ []
