@@ -98,7 +98,7 @@
           :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! ()
-            if (nil? build-errors)
+            if (js-nullish? build-errors)
               do (remove-watch! *store :change)
                 add-watch! *store :change $ fn (v _p) (render-app!)
                 replace-control-loop! 10 on-control-event
