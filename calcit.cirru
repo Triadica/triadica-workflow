@@ -85,7 +85,7 @@
             let
                 context $ .?!getContext canvas |webgl $ &js-object :antialias true
               if (js-present? context)
-                reset! *gl-context $ Option :some context
+                reset! *gl-context $ Some context
                 raise |WebGL-context-unavailable
             render-app!
             render-control!
