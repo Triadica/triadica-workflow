@@ -39,14 +39,21 @@
       :defs $ {}
         '*store $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defref *store
-            {} $ :states $ {}
+            SceneStore :states ({}) :v None
           :examples $ []
-          :schema $ quote $ Ref (Map Tag Dynamic)
+          :schema $ quote $ Ref SceneStore
         'SceneOp $ %{} 'CodeEntry
           :doc "|A direct state cursor or a tagged scene operation."
           :code $ quote $ defunion SceneOp (List Tag) Tag
           :examples $ []
           :schema $ quote UnionDef
+        'SceneStore $ %{} 'CodeEntry
+          :doc "|The template stores a Triadica state tree and an optional cube position."
+          :code $ quote $ defstruct SceneStore
+            :states $ Map Tag Dynamic
+            :v $ Option Number
+          :examples $ []
+          :schema $ quote StructDef
         'canvas $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def canvas
             .unwrap $ query-selector |canvas
@@ -62,14 +69,14 @@
                 (:ok operation)
                   match operation
                     (List cursor)
-                      reset! *store $ update-states store $ [] cursor data
+                      reset! *store $ decode-map-as
+                        update-states (&struct:to-map store) ([] cursor data)
+                        , SceneStore
                     (Tag tag)
                       if (= tag :cube-right)
-                        match (get store :v)
+                        match (:v store)
                           (:some value)
-                            if (number? value)
-                              reset! *store $ assoc store :v $ inc value
-                              raise "|cube-right expects numeric :v"
+                            reset! *store $ assoc store :v $ Some (inc value)
                           (:none) (raise "|cube-right expects numeric :v")
                         js/console.warn "|unknown op" op
                 (:err _)
