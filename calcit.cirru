@@ -47,10 +47,14 @@
           :code $ quote $ defunion SceneOp (List Tag) Tag
           :examples $ []
           :schema $ quote UnionDef
+        'SceneStateValue $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defunion SceneStateValue Bool Number String Tag (List SceneStateValue) (Map Tag SceneStateValue)
+          :examples $ []
+          :schema $ quote UnionDef
         'SceneStore $ %{} 'CodeEntry
           :doc "|The template stores a Triadica state tree and an optional cube position."
           :code $ quote $ defstruct SceneStore
-            :states $ Map Tag Dynamic
+            :states $ Map Tag SceneStateValue
             :v $ Option Number
           :examples $ []
           :schema $ quote StructDef
@@ -60,7 +64,7 @@
           :examples $ []
           :schema $ quote js-ffi.browser/DomElementHost
         'dispatch! $ %{} 'CodeEntry
-          :doc "|Decode the renderer operation while preserving arbitrary cursor state values."
+          :doc "|Validate the renderer cursor and decode its payload into the template state tree."
           :code $ quote $ defn dispatch! (op data)
             when dev? $ js/console.log |Dispatch: op data
             let
@@ -83,7 +87,7 @@
                   if (list? op) (raise "|State cursor requires Tag keys") (js/console.warn "|unknown op" op)
             , &unit
           :examples $ []
-          :schema $ quote $ Fn Operation Payload (-> Unit) (:generics Operation Payload) (:features :js-ffi)
+          :schema $ quote $ Fn Operation Payload (-> Unit) (:generics Operation Payload) (:features :js-ffi :state)
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! ()
             if dev? $ load-console-formatter!
@@ -102,7 +106,7 @@
             setup-mouse-events! canvas
             , &unit
           :examples $ []
-          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn (-> Unit) (:features :js-ffi :state)
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! ()
             if (js-nullish? build-errors)
@@ -116,14 +120,14 @@
               hud! |error build-errors
             , &unit
           :examples $ []
-          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn (-> Unit) (:features :js-ffi :state)
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
             load-objects! (comp-container) dispatch!
             paint-canvas!
             , &unit
           :examples $ []
-          :schema $ quote $ Fn (-> Unit)
+          :schema $ quote $ Fn (-> Unit) (:features :state)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.main
           :require (|./calcit.build-errors :default build-errors) (|bottom-tip :default hud!)
