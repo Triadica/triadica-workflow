@@ -9,16 +9,25 @@
       :type-slots $ {}
   :files $ {}
     'app.comp.container $ %{} 'FileEntry
-      :defs $ {} $ 'comp-container
-        %{} 'CodeEntry (:doc |)
+      :defs $ {}
+        'WaveOptionValue $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defunion WaveOptionValue Tag String
+            Map Tag $ List Number
+          :examples $ []
+        'comp-container $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-container ()
-            object $ {} (:draw-mode :line-strip)
+            object $ wave-options
+          :examples $ []
+          :schema $ quote $ Fn
+            -> $ Map Tag Dynamic
+        'wave-options $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defn wave-options ()
+            hint-fn $ Fn $ -> (Map Tag WaveOptionValue)
+            {} (:draw-mode :line-strip)
               :vertex-shader $ inline-shader |wave.vert
               :fragment-shader $ inline-shader |wave.frag
               :attributes $ {} $ :idx (range 100000)
           :examples $ []
-          :schema $ quote $ Fn
-            -> $ Map Tag Dynamic
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.comp.container
           :require
