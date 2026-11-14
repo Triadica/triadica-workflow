@@ -22,12 +22,13 @@
             -> $ Map Tag Dynamic
         'wave-options $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn wave-options ()
-            hint-fn $ Fn $ -> (Map Tag WaveOptionValue)
             {} (:draw-mode :line-strip)
               :vertex-shader $ inline-shader |wave.vert
               :fragment-shader $ inline-shader |wave.frag
               :attributes $ {} $ :idx (range 100000)
           :examples $ []
+          :schema $ quote $ Fn
+            -> $ Map Tag WaveOptionValue
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.comp.container
           :require
