@@ -138,7 +138,7 @@
             paint-canvas!
             , &unit
           :examples $ []
-          :schema $ quote $ Fn (-> Unit) (:features :state)
+          :schema $ quote $ Fn (-> Unit) (:features :io :state)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.main
           :require (|./calcit.build-errors :default build-errors) (|bottom-tip :default hud!)

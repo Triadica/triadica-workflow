@@ -4,9 +4,9 @@
 
 ### Calcit 0.44.0 使用说明
 
-使用正式 Calcit 与 `@calcit/procs` 0.44.0、Space 0.0.52，
+使用正式 Calcit 与 `@calcit/procs` 0.44.0、Space 0.0.53，
 重装正式依赖后重新生成 JS。静态示例的 `comp-container` 无需接收未使用的 store。
-扩展组件时可传入自己的具体状态类型。
+扩展组件时可传入自己的具体状态类型。绘制入口声明 `:io`，反映 Space 的零向量诊断。
 
 `SceneOp` 区分 `List<Tag>` 游标和 Tag 操作。直接游标仍接收应用自定的状态值，
 包括显式 nil。`:cube-right` 仍要求已有数值 `:v`，未知操作只提示警告。模板内部的 `*store` 使用具名 `SceneStore`，其中 `:v` 为 `Option<Number>`。从模板扩展此操作时，用 `Some` 设置已有的位置。
