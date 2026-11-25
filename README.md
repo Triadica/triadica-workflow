@@ -2,11 +2,11 @@
 
 - Demo https://r.tiye.me/Triadica/triadica-workflow/
 
-### Calcit 0.44.0 使用说明
+### Calcit 0.45.1 使用说明
 
-使用正式 Calcit 与 `@calcit/procs` 0.44.0、Space 0.0.53，
+使用正式 Calcit 与 `@calcit/procs` 0.45.1、Space 0.0.55，
 重装正式依赖后重新生成 JS。静态示例的 `comp-container` 无需接收未使用的 store。
-扩展组件时可传入自己的具体状态类型。绘制入口声明 `:io`，反映 Space 的零向量诊断。
+扩展组件时可传入自己的具体状态类型。绘制入口声明 `:io`，反映 Space 的零向量诊断。 本次升级通过 178 个定义的 strict 与构建；项目无附带测试，浏览器交互尚未复验。
 
 `SceneOp` 区分 `List<Tag>` 游标和 Tag 操作。直接游标仍接收应用自定的状态值，
 包括显式 nil。`:cube-right` 仍要求已有数值 `:v`，未知操作只提示警告。模板内部的 `*store` 使用具名 `SceneStore`，其中 `:v` 为 `Option<Number>`。从模板扩展此操作时，用 `Some` 设置已有的位置。
@@ -21,7 +21,7 @@
 
 相对于旧 Space 0.0.40，此升级继承 0.0.42 已发布的绘制帧边界：`paint-canvas!` 返回 Unit，将绘制安排到下一浏览器帧，同一帧前请求合并并读取最新状态，不再承诺调用栈内同步绘制完成。默认 glow 保留；模板本身不另外修改该语义。
 
-Use Node.js 24, Yarn 4.18.0 and Calcit 0.44.0. `calcit.cirru` is the source
+Use Node.js 24, Yarn 4.18.0 and Calcit 0.45.1. `calcit.cirru` is the source
 Snapshot and `deps.cirru` pins formal module releases.
 
 ```bash
